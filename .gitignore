@@ -20,6 +20,9 @@
 # production
 /build
 
+# local user data and uploaded materials
+/data/
+
 # misc
 .DS_Store
 *.pem

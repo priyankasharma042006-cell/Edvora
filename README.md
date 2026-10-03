@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Edvora
 
-## Getting Started
+Edvora is a local learning workspace for organizing subjects and study files, with optional AI-assisted study tools.
 
-First, run the development server:
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Create an account, add a subject, then upload a learning file from the subject page or the Materials page.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Local storage and file support
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Account, subject, and material metadata are stored in `data/edvora.json`.
+- Uploaded files are saved under `data/uploads/` on the machine running Next.js. They are scoped by owner and subject in the metadata, and are not publicly served.
+- These files are local development storage, not cloud backups. Do not use this storage mode for a multi-instance or production deployment.
+- Supported uploads: PDF, PPT/PPTX, DOC/DOCX, TXT, PNG, JPG/JPEG. The current maximum is 25 MB per file.
+- Content extraction currently supports plain `.txt` only. Other formats can be stored and downloaded, but Edvora reports that analysis is unsupported rather than claiming to have read them.
 
-## Learn More
+## AI features
 
-To learn more about Next.js, take a look at the following resources:
+AI summaries, notes, quizzes, flashcards, and Ask Edvora require a configured OpenAI API key. Set `OPENAI_API_KEY` in the environment before starting the app. Optionally set `OPENAI_MODEL` to choose a model; the default is `gpt-4o-mini`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+When a student explicitly requests AI output, the selected `.txt` material's text is sent to OpenAI. When the key is absent, the UI displays a clear configuration message and does not substitute generated-looking demo answers.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Checks
 
-## Deploy on Vercel
+```bash
+npm run lint
+npm run build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Prototype limitations
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The current persistence layer uses local JSON and filesystem storage and is intended for a single local development instance. Authentication and storage should be replaced with production-grade session management and a managed database/object store before deployment. Password-reset email delivery, non-text document parsing, OCR, and long-term cloud backups are not configured.
